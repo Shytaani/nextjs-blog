@@ -3,8 +3,10 @@ import Layout from '../../components/layout'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 import Head from 'next/head'
 import Date from '../../components/date'
+import { PostDataWithContent } from '../../type/PostData'
+import { PostId } from '../../type/PostId'
 
-export default function Post({ postData }) {
+export default function Post({ postData }: { postData: PostDataWithContent }): JSX.Element {
   return (
     <Layout>
       <Head>
@@ -21,16 +23,23 @@ export default function Post({ postData }) {
   )
 }
 
-export async function getStaticPaths() {
-  const paths = getAllPostIds()
+export async function getStaticPaths(): Promise<{
+  paths: PostId[],
+  fallback: boolean
+}> {
+  const paths: PostId[] = getAllPostIds()
   return {
     paths,
     fallback: false
   }
 }
 
-export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id)
+export async function getStaticProps({ params }: PostId): Promise<{
+  props: {
+     postData: PostDataWithContent
+  }
+}> {
+  const postData: PostDataWithContent = await getPostData(params.id)
   return {
     props: {
       postData

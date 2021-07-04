@@ -4,9 +4,14 @@ import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
+import { PostData } from '../type/PostData'
 
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
+export async function getStaticProps(): Promise<{
+  props: {
+    allPostsData: PostData[]
+  }
+}> {
+  const allPostsData: PostData[] = getSortedPostsData()
   return {
     props: {
       allPostsData
@@ -14,7 +19,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: { allPostsData: PostData[] }): JSX.Element {
   return (
     <Layout home>
       <Head>
